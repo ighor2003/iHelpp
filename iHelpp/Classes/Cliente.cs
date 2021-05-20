@@ -1,22 +1,23 @@
-﻿using iHelp.Classes;
+﻿//using iHelp.Classes;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace iHelp.Classes
 {
-    public class cliente
+    public class Cliente
     {
         public int Id { get; set; }
         public string Nome { get; set; }
         public string Senha { get; set; }
         public string Email { get; set; }
         public double Nivel { get; set; }
-        public cliente() { }
+        public Cliente() { }
 
-        public cliente(int id, string nome, string senha, string email, double nivel)
+        public Cliente(int id, string nome, string senha, string email, double nivel)
         {
             Id = id;
             Nome = nome;
@@ -24,7 +25,7 @@ namespace iHelp.Classes
             Email = email;
             Nivel = nivel;
         }
-        public cliente(string nome, string senha, string email, double nivel)
+        public Cliente(string nome, string senha, string email, double nivel)
         {
             Nome = nome;
             Senha = senha;
@@ -34,27 +35,34 @@ namespace iHelp.Classes
         public void Inserir()
         {
             var cmd = Banco.Abrir();
-            cmd.CommandText = $"insert cliente values (" + $"0, '{Nome}', '{Senha}', '{Email}', '{Nivel}');";
+            cmd.CommandText = $"insert cliente values (0, '{Nome}', md5('{Senha}'), '{Email}', '{Nivel}');";
             cmd.ExecuteNonQuery();
             cmd.CommandText = "select @@identity";
         }
 
-        public List<cliente> Listar()
+        public List<Cliente> ObterCliente()
         {
-            List<cliente> lista = new List<cliente>();
+            List<Cliente> lista = new List<Cliente>();
+            // recheio...
             var cmd = Banco.Abrir();
-            cmd.CommandText = "select * from cliente";
-            var dr = cmd.ExecuteReader();
-            while (dr.Read())
+            if (cmd.Connection.State == ConnectionState.Open)
             {
-                lista.Add(new cliente(
-                dr.GetInt32(0),
-                dr.GetString(1),
-                dr.GetString(2),
-                dr.GetString(3),
-                dr.GetDouble(4)
-                ));
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "select * from cliente";
+                var dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    lista.Add(new Cliente(
+                        dr.GetInt32(0),
+                        dr.GetString(1),
+                        dr.GetString(2),
+                        dr.GetString(3),
+                        dr.GetDouble(4)
+                        )
+                    );
+                }
             }
+            return lista;
         }
         public void BuscarPorId(int id)
         {
@@ -74,6 +82,12 @@ namespace iHelp.Classes
             }
 
         }
+
+        internal List<Cliente> Listar()
+        {
+            throw new NotImplementedException();
+        }
+
         public bool Alterar(int id)
         {
             bool alterado = false;

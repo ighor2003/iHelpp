@@ -1,11 +1,12 @@
-﻿using iHelp.Classes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using iHelp.Classes;
+using MySql.Data.MySqlClient;
 
-namespace iHelp.classes
+namespace iHelpp.Classes
 {
     public class categoria
     {

@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace iHelpp
 {
-    public partial class Principal : Form
+    public partial class FrmPrincipal : Form
     {
-        public Principal()
+        public FrmPrincipal()
         {
             InitializeComponent();
         }
@@ -43,6 +43,16 @@ namespace iHelpp
             FrmTrabalhador frmTrabalhador = new FrmTrabalhador();
             frmTrabalhador.MdiParent = this;
             frmTrabalhador.Show();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void FrmPrincipal_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
